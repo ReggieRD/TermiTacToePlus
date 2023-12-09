@@ -1,7 +1,7 @@
-import java.util.scanner;
+import java.util.Scanner;
 
-public class titactoe{
-	char [][] board;
+public class tictactoe{
+	static char [][] board;
 	
 	public static void main (String [] args){
 		int dimensions;
@@ -10,18 +10,21 @@ public class titactoe{
 	}
 	
 	public static boolean insert(int row, int col, char c){
-
+		return false;
 	}
-	
-	public static char checkWin(){
 
+	public static boolean delete(int row, int col, char c){
+		return false;
+	}
+	public static char checkWin(){
+		return 0;
 	}
 	/* some additional functions to spice up the game:
 	swap two characters (in the event of a full board, players 
 	may swap two characters whether it be their own or opposition*/
 
 	public static boolean swap(int[] a, int[] b){
-
+		return false;
 	}
 	
 	/*===============================================================
@@ -29,7 +32,27 @@ public class titactoe{
 	===============================================================*/
 
 	public static void printBoard(){
+		System.out.print("   ");
+		for (int col = 0; col < board[0].length; col ++){
+			System.out.print(col+1+" ");
+		}
+		System.out.println();
+		for (int row = 0; row < board.length; row++){
+			System.out.print(row+1+"  ");
+			for (int col =0; col < board[0].length; col++){
+				System.out.print(board[row][col] + "|");
+			}
+			System.out.println();
+		}
+	}
 
+	public static void init() {
+		for (int row = 0; row < board.length; row++){
+			for (int col =0; col < board[0].length; col++){
+				board[row][col]='_';
+			}
+		}
+	 
 	}
 
 	/*==============================================================
@@ -41,7 +64,7 @@ public class titactoe{
 		boolean playerX = true; /* if false then playerO */
 		int xCredits = 0, yCredits = 0;
 		char move = '/'; 
-
+		init();
 		/* Key
 		/ none
 		s swap (cost 2 credits)
@@ -76,15 +99,19 @@ public class titactoe{
 				}
 			} else if (move == 'i' || move == 'd') {
 				/*prompts to get coordinates*/
-				if (move = 'i'){
+				System.out.print("Select Row: ");
+				int r = In.nextInt();
+				System.out.print("Select Col: ");
+				int c = In.nextInt();
+				if (move == 'i'){
 					if (playerX) insert(r,c, 'X');
 					else insert(r,c,'O');
 				} else {
 					if (playerX && xCredits >= 3) delete(r,c, 'X'); /*where character is the
 					character to replace deleted char with*/
-					else if (xCredits <3 ) /*not enough credits*/
-					else if (!playerX && yCredits>=3) delete(r,c,'O');
-					else /*not enough credits*/
+					//else if (xCredits <3 ) /*not enough credits*/
+					//else if (!playerX && yCredits>=3) delete(r,c,'O');
+					//else /*not enough credits*/
 				}
 			}
 
