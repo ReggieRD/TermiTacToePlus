@@ -10,11 +10,24 @@ public class tictactoe{
 	}
 	
 	public static boolean insert(int row, int col, char c){
-		return false;
+		if (row >=1 && row <= board.length){
+			if (col>=1 && row <=board[0].length){
+				if (board[row-1][col-1]=='_'){
+					board[row-1][col-1] = c;
+					return true;
+				} else return false;
+			} else return false;
+		} else return false;
 	}
 
 	public static boolean delete(int row, int col, char c){
-		return false;
+		if (row >=1 && row <= board.length){
+			if (col>=1 && row <=board[0].length){
+				board[row-1][col-1] = c;
+				return true;
+			} else return false;
+		} else return false;
+	
 	}
 	public static char checkWin(){
 		return 0;
@@ -24,7 +37,11 @@ public class tictactoe{
 	may swap two characters whether it be their own or opposition*/
 
 	public static boolean swap(int[] a, int[] b){
-		return false;
+		char temp = board[a[0]][a[1]];
+		board[a[0]][a[1]] = board[b[0]][b[1]];
+		board[b[0]][b[1]] = temp;
+		return true;
+		/*TODO validation*/
 	}
 	
 	/*===============================================================
@@ -62,25 +79,48 @@ public class tictactoe{
 		Scanner In = new Scanner(System.in);	
 		boolean running = true;
 		boolean playerX = true; /* if false then playerO */
-		int xCredits = 0, yCredits = 0;
+		int xCredits = 0, oCredits = 0;
 		char move = '/'; 
 		init();
 		/* Key
 		/ none
-		s swap (cost 2 credits)
+		s swap (cost 3 credits)
 		i insert (0 Credit)
 		d delete and replace (allows users to remove another players move and
-		place their own (costs 3 credits)
+		place their own (costs 4 credits)
 		credits increase by 1 with each turn
 		*/
 		while(running) {
+			System.out.println("================================================");
+			System.out.println("X Credits: "+xCredits+"|| O Credits: "+oCredits);
+			System.out.print("Current Player: ");
+			if (playerX) System.out.println("X");
+			else System.out.println("O");
+			System.out.println("================================================\n");
 			printBoard();
-			System.out.print("Move (s,i,d): ");
+			System.out.print("Move (s,i,d,p): ");
 			move = In.next().charAt(0);
+			if (move == 'g'){
+				oCredits += 1000;
+				continue;
+			}
 			if (move == 's') {
+				int []a = new int[2];
+				int []b = new int[2];
+				System.out.print("Select Source Row: ");
+				a[0] = In.nextInt()-1;
+				System.out.print("Select Source Col: ");
+				a[1] = In.nextInt()-1;
+				System.out.print("Select Destination Row: ");
+				b[0] = In.nextInt()-1;
+				System.out.print("Select Destination Col: ");
+				b[1] = In.nextInt()-1;
+
+				
 				if (playerX){
 					if (xCredits >= 2) {
 						/* execute the swap */
+						swap(a,b);
 						/*clear previous line and queue next prompt (first
 						 * coordinates, clear and queue second prompt (next
 						 * coordinates then finally clear and indicate status*/
@@ -88,14 +128,17 @@ public class tictactoe{
 					else {
 						/*invalid swap forfeit turn. clear previous line and
 						 * show that the move was invalid*/
-						playerX = !playerX;
+						 System.out.println("not enough credits for x to swap");
+						//playerX = !playerX;
 					}
-				} else if (yCredits >= 2) {
+				} else if (oCredits >= 2) {
 					/*execute swap*/
+					swap(a,b);
 
 				} else {
 					/*invalid swap forfeit turn*/
-					playerX = !playerX;
+					//playerX = !playerX;
+					System.out.println("not enough credits for o to swap");
 				}
 			} else if (move == 'i' || move == 'd') {
 				/*prompts to get coordinates*/
@@ -107,14 +150,27 @@ public class tictactoe{
 					if (playerX) insert(r,c, 'X');
 					else insert(r,c,'O');
 				} else {
-					if (playerX && xCredits >= 3) delete(r,c, 'X'); /*where character is the
+					if (playerX && xCredits >= 4){
+						delete(r,c, 'X'); 
+						xCredits -= 4;
+					} else if (playerX) System.out.println("Not enough credits for X");
+
+					if (!playerX && oCredits >= 4){
+						delete(r,c, 'O');
+						oCredits -= 4;
+					} else if (!playerX) System.out.println("Not enough credits for O");
+					/*TODO remember to do credit reduction*/ 
+					/*where character is the
 					character to replace deleted char with*/
 					//else if (xCredits <3 ) /*not enough credits*/
 					//else if (!playerX && yCredits>=3) delete(r,c,'O');
 					//else /*not enough credits*/
 				}
 			}
-
+			if (playerX) xCredits++;
+			else oCredits++;
+			playerX = !playerX;
+	
 		}
 
 	}
