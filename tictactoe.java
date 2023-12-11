@@ -63,6 +63,11 @@ public class tictactoe{
 		}
 	}
 
+	private static void clearScreen() {
+		System.out.print("\033[H\033[2J");
+		System.out.flush();
+	}
+
 	public static void init() {
 		for (int row = 0; row < board.length; row++){
 			for (int col =0; col < board[0].length; col++){
@@ -91,6 +96,7 @@ public class tictactoe{
 		credits increase by 1 with each turn
 		*/
 		while(running) {
+			clearScreen();
 			System.out.println("================================================");
 			System.out.println("X Credits: "+xCredits+"|| O Credits: "+oCredits);
 			System.out.print("Current Player: ");
