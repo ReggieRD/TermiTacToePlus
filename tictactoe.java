@@ -6,6 +6,7 @@ public class tictactoe{
 	public static void main (String [] args){
 		int dimensions;
 		board = new char[3][3];
+		clearScreen();
 		run();
 	}
 	
@@ -30,7 +31,38 @@ public class tictactoe{
 	
 	}
 	public static char checkWin(){
-		return 0;
+		boolean hasWon = false;
+		/* horizontal check, future updates will be more dynamically implemented
+		 * for larger board sizes*/
+		for (int row = 0; row < board.length; row++){
+			if(board[row][0] == board[row][1] && board[row][1] ==
+			board[row][2]){
+				hasWon = true;
+				return board[row][0];
+			}
+		}
+		/*vertical checks*/
+		for (int col = 0; col < board.length; col++){
+			if(board[0][col] == board[1][col] && board[1][col] ==
+			board[1][col]){
+				hasWon = true;
+				return board[0][col];
+			}
+		}
+		/* Top left to bottom right diagonal*/
+		if (board[0][0] == board[1][1] && board[1][1] == board[2][2]){
+			hasWon = true;
+			return board[0][0];
+		}
+		
+		/* Top right to bottom left diagonal*/
+		if (board[1][2] == board[1][1] && board[1][1] == board[2][1]){
+			hasWon = true;
+			return board[1][2];
+		}
+
+		return '_';
+		
 	}
 	/* some additional functions to spice up the game:
 	swap two characters (in the event of a full board, players 
@@ -41,7 +73,7 @@ public class tictactoe{
 		board[a[0]][a[1]] = board[b[0]][b[1]];
 		board[b[0]][b[1]] = temp;
 		return true;
-		/*TODO validation*/
+		/*TODO index validation (ensure index is in bounds)*/
 	}
 	
 	/*===============================================================
@@ -96,7 +128,7 @@ public class tictactoe{
 		credits increase by 1 with each turn
 		*/
 		while(running) {
-			clearScreen();
+			
 			System.out.println("================================================");
 			System.out.println("X Credits: "+xCredits+"|| O Credits: "+oCredits);
 			System.out.print("Current Player: ");
@@ -176,7 +208,14 @@ public class tictactoe{
 			if (playerX) xCredits++;
 			else oCredits++;
 			playerX = !playerX;
-	
+			char winner = checkWin();
+			if (winner != '_'){
+				clearScreen();
+				printBoard();
+				System.out.println(winner+ " wins the game!");
+				running = false;
+				break;
+			} else clearScreen();		
 		}
 
 	}
